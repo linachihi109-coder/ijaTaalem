@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% block body %}
+<div class="container"><h2 class="sec">{% if rapide %}⚡ Résultats de l'aide rapide{% else %}Trouver un tuteur{% endif %}</h2>
+<form class="cardx mb-4 row g-2 align-items-end">
+<div class="col-md-3"><label class="small">Matière</label><select name="matiere_id" class="form-select">
+<option value="">Toutes</option>{% for m in matieres %}<option value="{{ m.id }}" {{ 'selected' if matiere and matiere.id == m.id }}>{{ m.nom }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><label class="small">Date</label><input type="date" name="jour" value="{{ request.args.get('jour','') }}" class="form-control"></div>
+<div class="col-md-2"><label class="small">Début</label><input type="time" name="debut" value="{{ request.args.get('debut','') }}" class="form-control"></div>
+<div class="col-md-2"><label class="small">Fin</label><input type="time" name="fin" value="{{ request.args.get('fin','') }}" class="form-control"></div>
+<div class="col-md-2"><button class="btn btn-p w-100">Rechercher</button></div></form>
+{% if rapide and not matiere %}<div class="alert alert-info">Choisissez une matière pour l'aide rapide.</div>{% endif %}
+<div class="row g-3">{% for t in liste %}<div class="col-md-6"><div class="cardx">
+<div class="d-flex gap-3 align-items-center mb-2"><div class="avatar">{{ t.nom[0] }}</div>
+<div><b>{{ t.nom }}</b> <span class="badge badge-{{ t.badge }}">{{ t.badge }}</span><br>
+<small class="text-muted">{{ t.points }} pts · {% if t.note_moyenne %}⭐ {{ t.note_moyenne }}{% else %}pas encore noté{% endif %}</small></div></div>
+<p class="small mb-2">{{ t.bio }}</p>
+<p>{% for m in t.matieres %}<span class="badge bg-light text-dark border">{{ m.icone }} {{ m.nom }}</span> {% endfor %}</p>
+<p class="small text-muted">{% for d in t.disponibilites %}{{ JOURS[d.jour_semaine][:3] }} {{ d.debut.strftime('%H:%M') }}-{{ d.fin.strftime('%H:%M') }}{{ ' · ' if not loop.last }}{% endfor %}</p>
+<form method="post" action="{{ url_for('demander') }}" class="row g-2">
+<input type="hidden" name="tuteur_id" value="{{ t.id }}">
+<div class="col-12"><select name="matiere_id" class="form-select form-select-sm">{% for m in t.matieres %}<option value="{{ m.id }}" {{ 'selected' if matiere and matiere.id == m.id }}>{{ m.nom }}</option>{% endfor %}</select></div>
+<div class="col-5"><input type="date" name="jour" value="{{ request.args.get('jour','') }}" class="form-control form-control-sm" required></div>
+<div class="col-3"><input type="time" name="debut" value="{{ request.args.get('debut','') }}" class="form-control form-control-sm" required></div>
+<div class="col-4"><input type="time" name="fin" value="{{ request.args.get('fin','') }}" class="form-control form-control-sm" required></div>
+<div class="col-12"><input name="message" class="form-control form-control-sm" placeholder="Votre question (ex. jointures SQL)"></div>
+<div class="col-12"><button class="btn btn-p btn-sm w-100">Demander une séance</button></div></form></div></div>
+{% else %}<p class="text-muted">Aucun tuteur trouvé pour ces critères.</p>{% endfor %}</div></div>{% endblock %}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ijaTaalem – Entraide entre étudiants de l'ISI</title>
+<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet"></head><body>
+<nav class="navbar navbar-expand-lg"><div class="container">
+<a class="navbar-brand brand" href="{{ url_for('index') }}">🎓 ijaTaalem</a>
+<div class="ms-auto d-flex gap-2 align-items-center">
+<a class="nav-link" href="{{ url_for('tuteurs') }}">Trouver un tuteur</a>
+{% if g.user %}
+ {% if g.user.is_admin %}<a class="nav-link" href="{{ url_for('admin') }}">Administration</a>
+ {% else %}<a class="nav-link" href="{{ url_for('tableau_de_bord') }}">Mon espace</a>{% endif %}
+ <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('deconnexion') }}">Déconnexion</a>
+{% else %}
+ <a class="nav-link" href="{{ url_for('connexion') }}">Connexion</a>
+ <a class="btn btn-p btn-sm" href="{{ url_for('inscription') }}">S'inscrire</a>
+{% endif %}</div></div></nav>
+<div class="container mt-3">{% for cat, msg in get_flashed_messages(with_categories=true) %}
+<div class="alert alert-{{ cat }}">{{ msg }}</div>{% endfor %}</div>
+{% block body %}{% endblock %}
+<footer class="text-center text-muted py-5 small">ijaTaalem – Mini-projet L2-CS, ISI – Université Tunis El Manar</footer>
+</body></html>

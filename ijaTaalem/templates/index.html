@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% block body %}
+<section class="hero"><div class="container"><div class="row align-items-center g-4">
+<div class="col-lg-6"><h1 class="display-4 fw-bold">Apprenez ensemble, réussissez ensemble.</h1>
+<p class="lead">Des étudiants de l'ISI qui aident leurs camarades, séance après séance. Bloqué sur une jointure SQL ? Un tuteur est disponible demain.</p>
+<a class="btn btn-light btn-lg" href="{{ url_for('inscription') }}">Commencer gratuitement</a></div>
+<div class="col-lg-5 ms-auto"><div class="box"><h5 class="fw-bold">⚡ Aide rapide</h5>
+<form action="{{ url_for('tuteurs') }}" class="vstack gap-2">
+<select name="matiere_id" class="form-select" required>{% for m in matieres %}<option value="{{ m.id }}">{{ m.icone }} {{ m.nom }}</option>{% endfor %}</select>
+<input type="date" name="jour" class="form-control" required>
+<div class="d-flex gap-2"><input type="time" name="debut" class="form-control" required><input type="time" name="fin" class="form-control" required></div>
+<button class="btn btn-p">Trouver un tuteur disponible</button></form></div></div></div></div></section>
+<div class="container">
+<div class="row text-center my-5 g-3">
+<div class="col-4"><div class="stat">{{ nb_tuteurs }}</div>tuteurs</div>
+<div class="col-4"><div class="stat">{{ matieres|length }}</div>matières</div>
+<div class="col-4"><div class="stat">{{ nb_seances }}</div>séances réalisées</div></div>
+<h2 class="sec">Matières populaires</h2>
+<div class="row g-3">{% for m in matieres %}<div class="col-6 col-md-4 col-lg-2">
+<a href="{{ url_for('tuteurs', matiere_id=m.id) }}" class="text-decoration-none text-reset">
+<div class="cardx hover text-center"><div class="ico">{{ m.icone }}</div><b>{{ m.nom }}</b><div class="small text-muted">{{ m.tuteurs|length }} tuteur(s)</div></div></a></div>{% endfor %}</div>
+{% if top %}<h2 class="sec">🏆 Meilleurs tuteurs</h2><div class="row g-3 mb-5">{% for t in top %}
+<div class="col-md-4"><div class="cardx d-flex gap-3 align-items-center"><div class="avatar">{{ t.nom[0] }}</div>
+<div><b>{{ t.nom }}</b><br><span class="badge badge-{{ t.badge }}">{{ t.badge }}</span> <small>{{ t.points }} pts</small></div></div></div>{% endfor %}</div>{% endif %}
+</div>{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block body %}
+<div class="container"><h2 class="sec">Administration</h2><div class="row g-3 mb-5">
+<div class="col-md-6"><div class="cardx"><h6 class="fw-bold">Matières</h6>
+{% for m in matieres %}<form method="post" action="{{ url_for('admin_suppr_matiere', mid=m.id) }}" class="d-flex justify-content-between mb-1"><span>{{ m.icone }} {{ m.nom }}</span><button class="btn btn-sm btn-outline-danger">Supprimer</button></form>{% endfor %}
+<form method="post" action="{{ url_for('admin_matiere') }}" class="d-flex gap-1 mt-2"><input name="icone" class="form-control form-control-sm" style="width:70px" placeholder="📘"><input name="nom" class="form-control form-control-sm" placeholder="Nouvelle matière" required><button class="btn btn-sm btn-p">Ajouter</button></form></div></div>
+<div class="col-md-6"><div class="cardx"><h6 class="fw-bold">Comptes étudiants</h6>
+{% for u in users %}<form method="post" action="{{ url_for('admin_suppr_user', uid=u.id) }}" class="d-flex justify-content-between mb-1"><span>{{ u.nom }} <small class="text-muted">{{ u.email }}</small></span><button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce compte ?')">Supprimer</button></form>{% else %}<p class="text-muted">Aucun compte.</p>{% endfor %}</div></div></div></div>{% endblock %}
